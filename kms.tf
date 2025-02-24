@@ -1,21 +1,23 @@
 locals {
+  name_prefix                          = substr(var.goog_cm_deployment_name, 0, 23)
+  federated_credentials_audience        = "//iam.googleapis.com/${google_iam_workload_identity_pool_provider.wip-attestation-verifier.name}"
   federated_credentials_service_account = "https://iamcredentials.googleapis.com/v1/projects/-/serviceAccounts/${google_service_account.key_account.email}:generateAccessToken"
 
-  polaris_pro_proxy_docker_command = "/usr/bin/docker run -d --name polaris-proxy --network local-network -p 3000:3000 -v /run/tpm_jwt_token:/run/container_launcher/attestation_verifier_claims_token -e POLARIS_CONTAINER_WORKLOAD_BASE_URL=http://client-workload:8000 -e POLARIS_CONTAINER_KEY_TYPE=google-federated ${var.polaris_proxy_enable_output_encryption ? "-e POLARIS_CONTAINER_ENABLE_INPUT_ENCRYPTION=true" : ""} ${var.polaris_proxy_enable_input_encryption ? "-e POLARIS_CONTAINER_ENABLE_OUTPUT_ENCRYPTION=true" : ""} ${var.polaris_proxy_enable_cors ? "-e POLARIS_CONTAINER_ENABLE_CORS=true" : ""} ${var.polaris_proxy_enable_logging ? "-e POLARIS_CONTAINER_ENABLE_LOGGING=true" : ""} -e POLARIS_CONTAINER_GOOGLE_FEDERATED_KEY_PROJECT_ID=${var.project_id} -e POLARIS_CONTAINER_GOOGLE_FEDERATED_KEY_LOCATION=${local.region} -e POLARIS_CONTAINER_GOOGLE_FEDERATED_KEY_RING_ID=${google_kms_key_ring.default.name} -e POLARIS_CONTAINER_GOOGLE_FEDERATED_KEY_ID=${google_kms_crypto_key.default.name} -e POLARIS_CONTAINER_GOOGLE_FEDERATED_KEY_AUDIENCE=${google_iam_workload_identity_pool_provider.wip-attestation-verifier.name} -e POLARIS_CONTAINER_GOOGLE_FEDERATED_KEY__SERVICE_ACCOUNT=${local.federated_credentials_service_account} ${var.polaris_proxy_image}:${var.polaris_proxy_image_version}"
+  polaris_pro_proxy_docker_command = "/usr/bin/docker run -d --name polaris-proxy --network local-network -p 3000:3000 -v /run/tpm_jwt_token:/run/container_launcher/attestation_verifier_claims_token -e POLARIS_CONTAINER_WORKLOAD_BASE_URL=http://client-workload:8000 -e POLARIS_CONTAINER_KEY_TYPE=google-federated ${var.polaris_proxy_enable_output_encryption ? "-e POLARIS_CONTAINER_ENABLE_INPUT_ENCRYPTION=true" : ""} ${var.polaris_proxy_enable_input_encryption ? "-e POLARIS_CONTAINER_ENABLE_OUTPUT_ENCRYPTION=true" : ""} ${var.polaris_proxy_enable_cors ? "-e POLARIS_CONTAINER_ENABLE_CORS=true" : ""} ${var.polaris_proxy_enable_logging ? "-e POLARIS_CONTAINER_ENABLE_LOGGING=true" : ""} -e POLARIS_CONTAINER_GOOGLE_FEDERATED_KEY_PROJECT_ID=${var.project_id} -e POLARIS_CONTAINER_GOOGLE_FEDERATED_KEY_LOCATION=${local.region} -e POLARIS_CONTAINER_GOOGLE_FEDERATED_KEY_RING_ID=${google_kms_key_ring.default.name} -e POLARIS_CONTAINER_GOOGLE_FEDERATED_KEY_ID=${google_kms_crypto_key.default.name} -e POLARIS_CONTAINER_GOOGLE_FEDERATED_KEY_AUDIENCE=${local.federated_credentials_audience} -e POLARIS_CONTAINER_GOOGLE_FEDERATED_KEY__SERVICE_ACCOUNT=${local.federated_credentials_service_account} ${var.polaris_proxy_image}:${var.polaris_proxy_image_version}"
 }
 
 resource "google_service_account" "key_account" {
-  account_id = "${var.goog_cm_deployment_name}-key-sa"
+  account_id = "${local.name_prefix}-key-sa"
 }
 
+
 resource "google_kms_key_ring" "default" {
-  depends_on = [google_project_service.cloudkms]
-  name     = "${var.goog_cm_deployment_name}-keyring"
+  name     = "${local.name_prefix}-keyring"
   location = local.region
 }
 
 resource "google_kms_crypto_key" "default" {
-  name     = "${var.goog_cm_deployment_name}-key"
+  name     = "${local.name_prefix}-key"
   key_ring = google_kms_key_ring.default.id
   purpose  = "ASYMMETRIC_DECRYPT"
 
@@ -30,13 +32,13 @@ resource "google_kms_crypto_key" "default" {
 }
 
 resource "google_iam_workload_identity_pool" "wip" {
-  workload_identity_pool_id = "${var.goog_cm_deployment_name}-wip"
+  workload_identity_pool_id = "${local.name_prefix}-wip"
   description               = "Workload Identity Pool for access to the key service account's resources"
   disabled                  = false
 }
 
 resource "google_iam_workload_identity_pool_provider" "wip-attestation-verifier" {
-  workload_identity_pool_provider_id = "${var.goog_cm_deployment_name}-provider"
+  workload_identity_pool_provider_id = "${local.name_prefix}-provider"
   workload_identity_pool_id          = google_iam_workload_identity_pool.wip.workload_identity_pool_id
 
   attribute_mapping = {
