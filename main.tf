@@ -2,7 +2,7 @@ locals {
   region = substr(var.zone, 0, length(var.zone) - 2)
 
   network_interfaces = [for i, n in var.networks : {
-    network     = "default",
+    network     = n,
     subnetwork  = length(var.sub_networks) > i ? element(var.sub_networks, i) : null
     external_ip = length(var.external_ips) > i ? element(var.external_ips, i) : "NONE"
     }
