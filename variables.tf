@@ -119,7 +119,6 @@ variable "polaris_proxy_enable_logging" {
 variable "polaris_proxy_image" {
   description = "Docker image URL of the Polaris Proxy"
   type        = string
-  default     = "us-docker.pkg.dev/fr0ntierx-public-dev/fr0ntierx-public-dev-registry/polaris-proxy"
 }
 
 variable "polaris_proxy_image_version" {
