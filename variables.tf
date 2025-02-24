@@ -74,11 +74,6 @@ variable "service_account" {
   default     = ""
 }
 
-variable "terraform_service_account" {
-  description = "The service account used by Terraform to provision resources."
-  type        = string
-}
-
 // Polaris Proxy Configuration
 variable "polaris_proxy_port" {
   description = "Port that will be exposed by the Polaris Container"

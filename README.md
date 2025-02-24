@@ -37,8 +37,7 @@ Be aware that deploying Polaris Pro (with `enable_kms = true`) may incur additio
 | networks                        | list(string)       | Networks where the VM will be created.                                    | ["default"]                              |
 | sub_networks                    | list(string)       | Subnets for VM deployment.                                                | ["default"]                              |
 | external_ips                    | list(string)       | External IP configuration for the VM.                                     | ["EPHEMERAL"]                            |
-| service_account                 | string             | Service Account used by the Compute Instance.                             | ""                                       |
-| terraform_service_account       | string             | Service account used by Terraform for resource provisioning.              | ""                                       |
+| service_account                 | string             | Service Account used by the Compute Instance.                             | ""                                       |                                    |
 | polaris_proxy_port              | string             | Port exposed by the Polaris Proxy.                                        | "3000"                                   |
 | polaris_proxy_source_ranges     | string             | Comma-separated list of source IP ranges allowed to access the proxy.       | ""                                       |
 | polaris_proxy_enable_input_encryption  | bool       | Enable input encryption on the proxy container.                           | false                                    |
@@ -107,7 +106,6 @@ module "polaris" {
   zone                      = "us-central1-a"
   machine_type              = "n2d-standard-2"
   service_account           = "my-service-account@my-project.iam.gserviceaccount.com"
-  terraform_service_account = "terraform-automation@my-project.iam.gserviceaccount.com"
   polaris_proxy_image       = "us-docker.pkg.dev/my-registry/polaris-proxy"
   workload_image            = "us-docker.pkg.dev/my-registry/client-workload"
   enable_kms                = true  # Switches between Polaris (false) and Polaris Pro (true)
