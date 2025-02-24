@@ -29,9 +29,4 @@ terraform {
       version = ">= 6.10.0"
     }
   }
-
-  # backend "gcs" {
-  #   bucket                      = "polaris-terraform-test-terraform"
-  #   impersonate_service_account = "terraform-automation@polaris-terraform-test.iam.gserviceaccount.com"
-  # }
 }
