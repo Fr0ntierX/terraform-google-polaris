@@ -19,14 +19,3 @@ provider "google" {
   access_token    = data.google_service_account_access_token.default.access_token
   request_timeout = "60s"
 }
-
-terraform {
-  required_version = "1.9.8"
-
-  required_providers {
-    google = {
-      source  = "hashicorp/google"
-      version = ">= 6.10.0"
-    }
-  }
-}
