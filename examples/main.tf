@@ -1,22 +1,25 @@
-provider "google" {
-  project = var.project_id
-  region  = var.region
-}
-
-module "polaris" {
+module "polaris-terraform-module" {
   source = "../"
 
-  project_id                = var.project_id
-  deployment_name           = var.deployment_name
-  region                    = var.region
-  workload_image            = var.workload_image
-  service_account           = var.service_account
-  zone                      = var.zone
-  polaris_proxy_port        = var.polaris_proxy_port
-  networks                  = var.networks
-  sub_networks              = var.sub_networks
-  external_ips              = var.external_ips
-  polaris_proxy_image       = var.polaris_proxy_image
-  workload_port             = var.workload_port
-  workload_env_vars         = var.workload_env_vars
+  # Project Configuration
+  project_id      = "polaris-terraform-test"
+  deployment_name = "anonymization-service"
+  region          = "us-central1"
+  zone            = "us-central1-a"
+
+  # Service Configuration
+  service_account = "terraform-automation@polaris-terraform-test.iam.gserviceaccount.com"
+  workload_image  = "fr0ntierx/anonymization-service"
+  workload_port   = "8000"
+
+  # Network Configuration
+  networks     = ["default"]
+  sub_networks = ["default"]
+  external_ips = ["EPHEMERAL"]
+
+  # Polaris Proxy Configuration
+  polaris_proxy_image = "us-docker.pkg.dev/fr0ntierx-public-dev/fr0ntierx-public-dev-registry/polaris-proxy"
+  polaris_proxy_port  = "3000"
+
+  enable_kms = true
 }
