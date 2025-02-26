@@ -7,7 +7,7 @@ module "polaris" {
   source = "../"
 
   project_id                = var.project_id
-  goog_cm_deployment_name   = var.goog_cm_deployment_name
+  deployment_name           = var.deployment_name
   region                    = var.region
   workload_image            = var.workload_image
   service_account           = var.service_account
