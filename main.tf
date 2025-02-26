@@ -116,12 +116,12 @@ resource "google_project_service" "confidentialcomputing" {
 resource "google_compute_instance" "instance" {
   depends_on = [google_project_service.confidentialcomputing]
 
-  name             = "${var.goog_cm_deployment_name}-vm"
+  name             = "${var.deployment_name}-vm"
   machine_type     = var.machine_type
   zone             = var.zone
   min_cpu_platform = "AMD Milan"
 
-  tags = ["${var.goog_cm_deployment_name}-deployment"]
+  tags = ["${var.deployment_name}-deployment"]
 
   confidential_instance_config {
     enable_confidential_compute = true
@@ -134,7 +134,7 @@ resource "google_compute_instance" "instance" {
   }
 
   boot_disk {
-    device_name = "${var.goog_cm_deployment_name}-boot-disk"
+    device_name = "${var.deployment_name}-boot-disk"
 
     initialize_params {
       size  = var.boot_disk_size
@@ -175,7 +175,7 @@ resource "google_compute_instance" "instance" {
 resource "google_compute_firewall" "secure_container_tcp" {
   count = var.polaris_proxy_source_ranges == "" ? 0 : 1
 
-  name    = "${var.goog_cm_deployment_name}-secure-container-tcp"
+  name    = "${var.deployment_name}-secure-container-tcp"
   network = element(var.networks, 0)
 
   allow {
@@ -185,5 +185,5 @@ resource "google_compute_firewall" "secure_container_tcp" {
 
   source_ranges = compact([for range in split(",", var.polaris_proxy_source_ranges) : trimspace(range)])
 
-  target_tags = ["${var.goog_cm_deployment_name}-deployment"]
+  target_tags = ["${var.deployment_name}-deployment"]
 }

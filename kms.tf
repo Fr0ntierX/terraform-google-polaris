@@ -1,5 +1,5 @@
 locals {
-  name_prefix                          = substr(var.goog_cm_deployment_name, 0, 23)
+  name_prefix                          = substr(var.deployment_name, 0, 23)
   federated_credentials_audience        = "//iam.googleapis.com/${google_iam_workload_identity_pool_provider.wip-attestation-verifier.name}"
   federated_credentials_service_account = "https://iamcredentials.googleapis.com/v1/projects/-/serviceAccounts/${google_service_account.key_account.email}:generateAccessToken"
 

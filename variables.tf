@@ -3,7 +3,7 @@ variable "project_id" {
   type        = string
 }
 
-variable "goog_cm_deployment_name" {
+variable "deployment_name" {
   description = "The name of the deployment and VM instance."
   type        = string
 }

@@ -2,7 +2,7 @@ variable "project_id" {
   type        = string
 }
 
-variable "goog_cm_deployment_name" {
+variable "deployment_name" {
   type        = string
 }
 

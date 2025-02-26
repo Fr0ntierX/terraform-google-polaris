@@ -26,7 +26,7 @@ Be aware that deploying Polaris Pro (with `enable_kms = true`) may incur additio
 | Name                            | Type               | Description                                                               | Default                                  |
 |---------------------------------|--------------------|---------------------------------------------------------------------------|------------------------------------------|
 | project_id                      | string             | GCP Project ID for provisioning resources.                                | N/A                                      |
-| goog_cm_deployment_name         | string             | Name of the deployment and VM instance.                                   | N/A                                      |
+| deployment_name                 | string             | Name of the deployment and VM instance.                                   | N/A                                      |
 | source_image                    | string             | Disk image used for creating the VM.                                      | projects/fr0ntierx-public/global/images/polaris-dev-image |
 | enable_kms                      | bool               | Enable Cloud KMS integration for Polaris Proxy.                           | false                                    |
 | region                          | string             | Region for resource deployment.                                           | N/A                                      |
@@ -101,7 +101,7 @@ Below is a sample configuration:
 module "polaris" {
   source                    = "./polaris-terraform-module"
   project_id                = "my-project"
-  goog_cm_deployment_name   = "polaris-instance"
+  deployment_name           = "polaris-instance"
   region                    = "us-central1"
   zone                      = "us-central1-a"
   machine_type              = "n2d-standard-2"
