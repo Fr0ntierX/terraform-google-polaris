@@ -25,7 +25,7 @@ Be aware that deploying Polaris Pro (with `enable_kms = true`) may incur additio
 ## Variables
 | Name                            | Type               | Description                                                               | Default                                  |
 |---------------------------------|--------------------|---------------------------------------------------------------------------|------------------------------------------|
-| project_id                      | string             | GCP Project ID for provisioning resources.                                | N/A                                      |
+| project_id                      | string             | Project ID for provisioning resources.                                | N/A                                      |
 | deployment_name                 | string             | Name of the deployment and VM instance.                                   | N/A                                      |
 | source_image                    | string             | Disk image used for creating the VM.                                      | projects/fr0ntierx-public/global/images/polaris-dev-image |
 | enable_kms                      | bool               | Enable Cloud KMS integration for Polaris Proxy.                           | false                                    |
@@ -98,7 +98,7 @@ When `enable_kms` is true:
 ### Usage Example
 Below is a sample configuration:
 ```hcl
-module "polaris" {
+module "polaris-terraform-module" {
   source                    = "./polaris-terraform-module"
   project_id                = "my-project"
   deployment_name           = "polaris-instance"
