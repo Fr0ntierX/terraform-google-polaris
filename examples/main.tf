@@ -2,13 +2,13 @@ module "polaris-terraform-module" {
   source = "../"
 
   # Project Configuration
-  project_id      = "polaris-terraform-test"
-  deployment_name = "anonymization-service"
+  project_id      = "polaris-terraform"
+  name            = "anonymization-service"
   region          = "us-central1"
   zone            = "us-central1-a"
 
   # Service Configuration
-  service_account = "terraform-automation@polaris-terraform-test.iam.gserviceaccount.com"
+  service_account = "terraform-automation@polaris-terraform.iam.gserviceaccount.com"
   workload_image  = "fr0ntierx/anonymization-service"
   workload_port   = "8000"
 
@@ -18,7 +18,6 @@ module "polaris-terraform-module" {
   external_ips = ["EPHEMERAL"]
 
   # Polaris Proxy Configuration
-  polaris_proxy_image = "us-docker.pkg.dev/fr0ntierx-public-dev/fr0ntierx-public-dev-registry/polaris-proxy"
   polaris_proxy_port  = "3000"
 
   enable_kms = true
