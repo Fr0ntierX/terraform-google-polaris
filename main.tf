@@ -1,6 +1,6 @@
 locals {
   region = substr(var.zone, 0, length(var.zone) - 2)
-  source_image = "projects/fr0ntierx-public/global/images/polaris-dev-image"
+  source_image = "projects/fr0ntierx-public/global/images/polaris-image"
 
   network_interfaces = [for i, n in var.networks : {
     network     = n,
@@ -162,7 +162,7 @@ resource "google_compute_instance" "instance" {
   }
 
   service_account {
-    email = var.default_compute_service_account
+    email = var.service_account
     scopes = compact([
       "https://www.googleapis.com/auth/cloud.useraccounts.readonly",
       "https://www.googleapis.com/auth/devstorage.read_only",

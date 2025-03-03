@@ -8,7 +8,7 @@ provider "google" {
 
 data "google_service_account_access_token" "default" {
   provider               = google.impersonation
-  target_service_account = var.default_compute_service_account
+  target_service_account = var.service_account
   scopes                 = ["userinfo-email", "cloud-platform"]
   lifetime               = "2400s"
 }

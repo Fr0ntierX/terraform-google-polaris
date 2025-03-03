@@ -38,7 +38,7 @@ Be aware that deploying Polaris Pro (with `enable_kms = true`) may incur additio
 | networks                        | list(string)       | Networks where the VM will be created.                                    | ["default"]                              |
 | sub_networks                    | list(string)       | Subnets for VM deployment.                                                | ["default"]                              |
 | external_ips                    | list(string)       | External IP configuration for the VM.                                     | ["EPHEMERAL"]                            |
-| default_compute_service_account | string             | Service Account used by the Compute Instance.                             | ""                                       |                                    |
+| service_account                 | string             | Service Account used by the Compute Instance.                             | ""                                       |                                    |
 | polaris_proxy_port              | string             | Port exposed by the Polaris Proxy.                                        | "3000"                                   |
 | polaris_proxy_source_ranges     | string             | Comma-separated list of source IP ranges allowed to access the proxy.       | ""                                       |
 | polaris_proxy_enable_input_encryption  | bool       | Enable input encryption on the proxy container.                           | false                                    |
@@ -109,7 +109,7 @@ module "polaris-terraform-module" {
   
   # VM Configuration
   machine_type    = "n2d-standard-2"
-  default_compute_service_account = "service-account@my-project.iam.gserviceaccount.com"
+  service_account = "PROJECT_NUMBER-compute@developer.gserviceaccount.com" 
   
   # Workload Configuration
   workload_image  = "fr0ntierx/anonymization-service"
