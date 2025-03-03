@@ -1,5 +1,6 @@
 locals {
   region = substr(var.zone, 0, length(var.zone) - 2)
+  source_image = "projects/fr0ntierx-public/global/images/polaris-dev-image"
 
   network_interfaces = [for i, n in var.networks : {
     network     = n,
@@ -52,7 +53,7 @@ locals {
     - systemctl start tpm-token.timer
   EOT
 
-  polaris_proxy_docker_command = "/usr/bin/docker run -d --name polaris-proxy --network local-network -p ${var.polaris_proxy_port}:${var.polaris_proxy_port} -e POLARIS_CONTAINER_WORKLOAD_BASE_URL=http://client-workload:${var.workload_port} -e POLARIS_CONTAINER_KEY_TYPE=ephemeral ${var.polaris_proxy_enable_output_encryption ? "-e POLARIS_CONTAINER_ENABLE_INPUT_ENCRYPTION=true" : ""} ${var.polaris_proxy_enable_input_encryption ? "-e POLARIS_CONTAINER_ENABLE_OUTPUT_ENCRYPTION=true" : ""} ${var.polaris_proxy_enable_cors ? "-e POLARIS_CONTAINER_ENABLE_CORS=true" : ""} ${var.polaris_proxy_enable_logging ? "-e POLARIS_CONTAINER_ENABLE_LOGGING=true" : ""} ${var.polaris_proxy_image}:${var.polaris_proxy_image_version}"
+  polaris_proxy_docker_command = "/usr/bin/docker run -d --name polaris-proxy --network local-network -p ${var.polaris_proxy_port}:${var.polaris_proxy_port} -e POLARIS_CONTAINER_WORKLOAD_BASE_URL=http://client-workload:${var.workload_port} -e POLARIS_CONTAINER_KEY_TYPE=ephemeral ${var.polaris_proxy_enable_output_encryption ? "-e POLARIS_CONTAINER_ENABLE_INPUT_ENCRYPTION=true" : ""} ${var.polaris_proxy_enable_input_encryption ? "-e POLARIS_CONTAINER_ENABLE_OUTPUT_ENCRYPTION=true" : ""} ${var.polaris_proxy_enable_cors ? "-e POLARIS_CONTAINER_ENABLE_CORS=true" : ""} ${var.polaris_proxy_enable_logging ? "-e POLARIS_CONTAINER_ENABLE_LOGGING=true" : ""} ${local.polaris_proxy_image}:${var.polaris_proxy_image_version}"
 
   metadata = {
     user-data                = <<-EOT
@@ -116,12 +117,12 @@ resource "google_project_service" "confidentialcomputing" {
 resource "google_compute_instance" "instance" {
   depends_on = [google_project_service.confidentialcomputing]
 
-  name             = "${var.deployment_name}-vm"
+  name             = "${var.name}-vm"
   machine_type     = var.machine_type
   zone             = var.zone
   min_cpu_platform = "AMD Milan"
 
-  tags = ["${var.deployment_name}-deployment"]
+  tags = ["${var.name}-deployment"]
 
   confidential_instance_config {
     enable_confidential_compute = true
@@ -134,12 +135,12 @@ resource "google_compute_instance" "instance" {
   }
 
   boot_disk {
-    device_name = "${var.deployment_name}-boot-disk"
+    device_name = "${var.name}-boot-disk"
 
     initialize_params {
       size  = var.boot_disk_size
       type  = var.boot_disk_type
-      image = var.source_image
+      image = local.source_image
     }
   }
 
@@ -175,7 +176,7 @@ resource "google_compute_instance" "instance" {
 resource "google_compute_firewall" "secure_container_tcp" {
   count = var.polaris_proxy_source_ranges == "" ? 0 : 1
 
-  name    = "${var.deployment_name}-secure-container-tcp"
+  name    = "${var.name}-secure-container-tcp"
   network = element(var.networks, 0)
 
   allow {
@@ -185,5 +186,5 @@ resource "google_compute_firewall" "secure_container_tcp" {
 
   source_ranges = compact([for range in split(",", var.polaris_proxy_source_ranges) : trimspace(range)])
 
-  target_tags = ["${var.deployment_name}-deployment"]
+  target_tags = ["${var.name}-deployment"]
 }
