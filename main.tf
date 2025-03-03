@@ -162,7 +162,7 @@ resource "google_compute_instance" "instance" {
   }
 
   service_account {
-    email = var.service_account
+    email = var.default_compute_service_account
     scopes = compact([
       "https://www.googleapis.com/auth/cloud.useraccounts.readonly",
       "https://www.googleapis.com/auth/devstorage.read_only",

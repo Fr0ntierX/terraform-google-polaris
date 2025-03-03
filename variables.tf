@@ -62,7 +62,7 @@ variable "external_ips" {
   default     = ["EPHEMERAL"]
 }
 
-variable "service_account" {
+variable "default_compute_service_account" {
   description = "Service Account that will run the VM"
   type        = string
   default     = ""

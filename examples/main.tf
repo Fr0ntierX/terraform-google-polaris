@@ -8,7 +8,7 @@ module "polaris-terraform-module" {
   zone            = "us-central1-a"
 
   # Service Configuration
-  service_account = "terraform-automation@polaris-terraform.iam.gserviceaccount.com"
+  default_compute_service_account = "terraform-automation@polaris-terraform.iam.gserviceaccount.com"
   workload_image  = "fr0ntierx/anonymization-service"
   workload_port   = "8000"
 

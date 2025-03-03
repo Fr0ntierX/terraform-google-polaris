@@ -38,7 +38,7 @@ Be aware that deploying Polaris Pro (with `enable_kms = true`) may incur additio
 | networks                        | list(string)       | Networks where the VM will be created.                                    | ["default"]                              |
 | sub_networks                    | list(string)       | Subnets for VM deployment.                                                | ["default"]                              |
 | external_ips                    | list(string)       | External IP configuration for the VM.                                     | ["EPHEMERAL"]                            |
-| service_account                 | string             | Service Account used by the Compute Instance.                             | ""                                       |                                    |
+| default_compute_service_account | string             | Service Account used by the Compute Instance.                             | ""                                       |                                    |
 | polaris_proxy_port              | string             | Port exposed by the Polaris Proxy.                                        | "3000"                                   |
 | polaris_proxy_source_ranges     | string             | Comma-separated list of source IP ranges allowed to access the proxy.       | ""                                       |
 | polaris_proxy_enable_input_encryption  | bool       | Enable input encryption on the proxy container.                           | false                                    |
@@ -99,15 +99,23 @@ When `enable_kms` is true:
 Below is a sample configuration:
 ```hcl
 module "polaris-terraform-module" {
-  source                    = "./polaris-terraform-module"
-  project_id                = "my-project"
-  name                      = "polaris-instance"
-  region                    = "us-central1"
-  zone                      = "us-central1-a"
-  machine_type              = "n2d-standard-2"
-  service_account           = "service-account@my-project.iam.gserviceaccount.com"
-  workload_image            = "fr0ntierx/anonymization-service"
-  enable_kms                = true  # Switches between Polaris (false) and Polaris Pro (true)
+  source          = "./polaris-terraform-module"
+  
+  # Basic Configuration  
+  project_id      = "my-project"
+  name            = "polaris-instance"
+  region          = "us-central1"
+  zone            = "us-central1-a"
+  
+  # VM Configuration
+  machine_type    = "n2d-standard-2"
+  default_compute_service_account = "service-account@my-project.iam.gserviceaccount.com"
+  
+  # Workload Configuration
+  workload_image  = "fr0ntierx/anonymization-service"
+  
+  # Feature Configuration
+  enable_kms      = true  # Switches between Polaris (false) and Polaris Pro (true)
 }
 ```
 
