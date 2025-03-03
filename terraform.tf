@@ -8,7 +8,7 @@ provider "google" {
 
 data "google_service_account_access_token" "default" {
   provider               = google.impersonation
-  target_service_account = var.terraform_service_account
+  target_service_account = var.service_account
   scopes                 = ["userinfo-email", "cloud-platform"]
   lifetime               = "2400s"
 }
@@ -18,20 +18,4 @@ provider "google" {
   region          = var.region
   access_token    = data.google_service_account_access_token.default.access_token
   request_timeout = "60s"
-}
-
-terraform {
-  required_version = "1.9.8"
-
-  required_providers {
-    google = {
-      source  = "hashicorp/google"
-      version = ">= 6.10.0"
-    }
-  }
-
-  backend "gcs" {
-    bucket                      = "polaris-terraform-test-terraform"
-    impersonate_service_account = "terraform-automation@polaris-terraform-test.iam.gserviceaccount.com"
-  }
 }
