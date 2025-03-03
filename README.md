@@ -7,6 +7,8 @@ The Polaris Terraform Module provisions a secure VM in Google Cloud with Confide
 
 Optional integration with Cloud KMS enables enhanced security through asymmetric decryption backed by HSM, alongside workload identity federation.
 
+For more detailed information about Polaris, please visit the [Polaris documentation](https://docs.fr0ntierx.com).
+
 ## Requirements
 
 | Requirement                          | Details                                                                        |
@@ -26,8 +28,7 @@ Be aware that deploying Polaris Pro (with `enable_kms = true`) may incur additio
 | Name                            | Type               | Description                                                               | Default                                  |
 |---------------------------------|--------------------|---------------------------------------------------------------------------|------------------------------------------|
 | project_id                      | string             | Project ID for provisioning resources.                                | N/A                                      |
-| deployment_name                 | string             | Name of the deployment and VM instance.                                   | N/A                                      |
-| source_image                    | string             | Disk image used for creating the VM.                                      | projects/fr0ntierx-public/global/images/polaris-dev-image |
+| name                            | string             | Name                                                                      | N/A                                      |
 | enable_kms                      | bool               | Enable Cloud KMS integration for Polaris Proxy.                           | false                                    |
 | region                          | string             | Region for resource deployment.                                           | N/A                                      |
 | zone                            | string             | Zone where the instance will be deployed.                                 | us-central1-a                            |
@@ -44,7 +45,6 @@ Be aware that deploying Polaris Pro (with `enable_kms = true`) may incur additio
 | polaris_proxy_enable_output_encryption | bool       | Enable output encryption on the proxy container.                          | false                                    |
 | polaris_proxy_enable_cors       | bool               | Enable CORS support for Polaris Proxy.                                    | false                                    |
 | polaris_proxy_enable_logging    | bool               | Enable logging in the Polaris Proxy.                                      | true                                     |
-| polaris_proxy_image             | string             | Docker image URL for the Polaris Proxy.                                   | N/A                                      |
 | polaris_proxy_image_version     | string             | Image version tag of the Polaris Proxy.                                   | "latest"                                 |
 | workload_port                   | string             | Port on which the workload container runs.                                | "8000"                                   |
 | workload_image                  | string             | Docker image URL for the client workload container.                       | N/A                                      |
@@ -101,15 +101,13 @@ Below is a sample configuration:
 module "polaris-terraform-module" {
   source                    = "./polaris-terraform-module"
   project_id                = "my-project"
-  deployment_name           = "polaris-instance"
+  name                      = "polaris-instance"
   region                    = "us-central1"
   zone                      = "us-central1-a"
   machine_type              = "n2d-standard-2"
-  service_account           = "my-service-account@my-project.iam.gserviceaccount.com"
-  polaris_proxy_image       = "us-docker.pkg.dev/my-registry/polaris-proxy"
-  workload_image            = "us-docker.pkg.dev/my-registry/client-workload"
+  service_account           = "service-account@my-project.iam.gserviceaccount.com"
+  workload_image            = "fr0ntierx/anonymization-service"
   enable_kms                = true  # Switches between Polaris (false) and Polaris Pro (true)
-  // ...additional configuration...
 }
 ```
 

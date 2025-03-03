@@ -3,15 +3,9 @@ variable "project_id" {
   type        = string
 }
 
-variable "deployment_name" {
+variable "name" {
   description = "The name of the deployment and VM instance."
   type        = string
-}
-
-variable "source_image" {
-  description = "The disk image to create the VM instance from."
-  type        = string
-  default     = "projects/fr0ntierx-public/global/images/polaris-dev-image"
 }
 
 variable "enable_kms" {
@@ -109,11 +103,6 @@ variable "polaris_proxy_enable_logging" {
   description = "Enable logging"
   type        = bool
   default     = true
-}
-
-variable "polaris_proxy_image" {
-  description = "Docker image URL of the Polaris Proxy"
-  type        = string
 }
 
 variable "polaris_proxy_image_version" {
