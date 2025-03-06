@@ -1,5 +1,5 @@
 module "polaris-terraform-module" {
-  source = "../"
+  source = "Fr0ntierX/polaris/google"
 
   # Project Configuration
   project_id      = "polaris-terraform"

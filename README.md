@@ -99,7 +99,7 @@ When `enable_kms` is true:
 Below is a sample configuration:
 ```hcl
 module "polaris-terraform-module" {
-  source          = "./polaris-terraform-module"
+  source          = "Fr0ntierX/polaris/google"
   
   # Basic Configuration  
   project_id      = "my-project"
@@ -119,20 +119,6 @@ module "polaris-terraform-module" {
 }
 ```
 
-### Deployment Steps
-1. Initialize Terraform:
-   ```sh
-   terraform init
-   ```
-2. Plan the deployment:
-   ```sh
-   terraform plan
-   ```
-3. Apply the configuration:
-   ```sh
-   terraform apply
-   ```
-
 ### Examples Comparison Table
 
 | Feature                         | Enabled Example                     | Description                                                           |
@@ -145,4 +131,3 @@ module "polaris-terraform-module" {
 For additional customizations and advanced usage, refer to:
 - [Terraform Google Provider Documentation](https://registry.terraform.io/providers/hashicorp/google/latest/docs)
 - [Google Cloud KMS Documentation](https://cloud.google.com/kms/docs)
-- [Terraform Cloud-Init Examples](https://www.terraform.io/docs/language/meta-arguments/metadata.html)
